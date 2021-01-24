@@ -1,14 +1,16 @@
 package booking;
 
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.json.JSONObject;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BookingTest {
 
     // given - specification
@@ -16,13 +18,50 @@ public class BookingTest {
     // then - assertion
 
     static String id;
+    static String token;
+    static String username = "admin";
+    static String password = "password123";
+
+    @BeforeAll
+    public static void setUp() {
+
+        RestAssured.baseURI = "http://localhost:3001";
+        RestAssured.port = 3001;
+        RestAssured.basePath = "/booking";
+        RestAssured.authentication = basic(username, password);
+    }
 
     @Test
+    @Order(1)
+    public void shouldCreateToken() {
+
+        JSONObject body = new JSONObject();
+        body.put("username", username);
+        body.put("password", password);
+
+        Response response = given().contentType(ContentType.JSON)
+                .body(body.toString())
+                .when()
+                .post(baseURI + "/auth")
+                .then()
+                .extract()
+                .response();
+
+        JsonPath json = response.jsonPath();
+
+        token = json.getString("token");
+
+        Assertions.assertThat(json.getString("token"))
+                .isNotEmpty();
+    }
+
+    @Test
+    @Order(2)
     public void shouldReturnListOfBookings() {
 
         Response response = given()
                 .when()
-                .get("http://localhost:3001/booking")
+                .get(baseURI + basePath)
                 .then()
                 .extract()
                 .response();
@@ -38,6 +77,7 @@ public class BookingTest {
     }
 
     @Test
+    @Order(3)
     public void shouldCreateNewBooking() {
 
         JSONObject bookingDates = new JSONObject();
@@ -56,7 +96,7 @@ public class BookingTest {
                 .contentType(ContentType.JSON)
                 .body(booking.toString())
                 .when()
-                .post("http://localhost:3001/booking")
+                .post(baseURI + basePath)
                 .then()
                 .extract()
                 .response();
@@ -73,11 +113,12 @@ public class BookingTest {
     }
 
     @Test
+    @Order(4)
     public void shouldGetCreatedBooking() {
 
         Response response = given()
                 .when()
-                .get("http://localhost:3001/booking/" + id)
+                .get(baseURI + basePath + "/" + id)
                 .then()
                 .extract()
                 .response();
@@ -92,11 +133,12 @@ public class BookingTest {
     }
 
     @Test
+    @Order(5)
     public void shouldDeleteCreatedBooking() {
 
-        Response response = given().header("Cookie", "token=065a20e5f167859")
+        Response response = given().header("Cookie", "token=" + token)
                 .when()
-                .delete("http://localhost:3001/booking/" + id)
+                .delete(baseURI + basePath + "/" + id)
                 .then()
                 .extract()
                 .response();
@@ -106,10 +148,11 @@ public class BookingTest {
     }
 
     @Test
+    @Order(6)
     public void shouldNotFindDeletedBooking() {
 
         Response response = given().when()
-                .get("http://localhost:3001/booking/" + id)
+                .get(baseURI + basePath + id)
                 .then()
                 .extract()
                 .response();
@@ -119,6 +162,7 @@ public class BookingTest {
     }
 
     @Test
+    @Order(7)
     public void shouldCreateAnotherBooking() {
 
         JSONObject bookingDates = new JSONObject();
@@ -137,7 +181,7 @@ public class BookingTest {
                 .contentType(ContentType.JSON)
                 .body(booking.toString())
                 .when()
-                .post("http://localhost:3001/booking")
+                .post(baseURI + basePath)
                 .then()
                 .extract()
                 .response();
@@ -154,17 +198,18 @@ public class BookingTest {
     }
 
     @Test
+    @Order(8)
     public void shouldPartiallyUpdateBooking() {
 
         JSONObject update = new JSONObject();
         update.put("firstname", "mat");
         update.put("lastname", "muz");
 
-        Response response = given().header("Cookie", "token=065a20e5f167859")
+        Response response = given().header("Cookie", "token=" + token)
                 .contentType(ContentType.JSON)
                 .body(update.toString())
                 .when()
-                .patch("http://localhost:3001/booking/" + id)
+                .patch(baseURI + basePath + "/" + id)
                 .then()
                 .extract()
                 .response();
