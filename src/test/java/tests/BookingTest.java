@@ -14,9 +14,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import static io.restassured.RestAssured.*;
 
 /**
- *     given - specification
- *     when - request
- *     then - assertion
+ * given - specification
+ * when - request
+ * then - assertion
  */
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -63,7 +63,7 @@ public class BookingTest extends BaseTest {
         JsonPath json = response.jsonPath();
 
         Assertions.assertThat(json.getList("bookingid")
-                                      .size())
+                .size())
                 .isPositive();
     }
 
@@ -205,9 +205,23 @@ public class BookingTest extends BaseTest {
                 .extract()
                 .response();
 
-        System.out.println(response.prettyPeek());
-
         Assertions.assertThat(response.statusCode())
                 .isEqualTo(200);
+    }
+
+    @Test
+    @Order(9)
+    public void shouldGetUpdatedBooking() {
+
+        Response response = given().when()
+                .get(baseURI + basePath + "/" + id)
+                .then()
+                .extract()
+                .response();
+
+        JsonPath json = response.jsonPath();
+
+        Assertions.assertThat(json.getString("firstname"))
+                .isEqualTo("firstname123");
     }
 }
