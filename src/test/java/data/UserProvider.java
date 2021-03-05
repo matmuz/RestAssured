@@ -15,9 +15,8 @@ public class UserProvider {
                 .firstName();
         this.lastName = faker.name()
                 .lastName();
-        this.username = firstName + lastName;
-        this.password = faker.phoneNumber()
-                .toString();
+        this.username = "admin";
+        this.password = "password123";
     }
 
     public String getUsername() {

@@ -10,15 +10,13 @@ public class BaseTest {
 
     protected static String id;
     protected static String token;
-    protected static String username = "admin";
-    protected static String password = "password123";
     protected static UserProvider user;
 
     @BeforeAll
     public static void setUp() {
+        user = new UserProvider();
         RestAssured.baseURI = "https://restful-booker.herokuapp.com";
         RestAssured.basePath = "/booking";
-        RestAssured.authentication = basic(username, password);
-        user = new UserProvider();
+        RestAssured.authentication = basic(user.getUsername(), user.getPassword());
     }
 }
