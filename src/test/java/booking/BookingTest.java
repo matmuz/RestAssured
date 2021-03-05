@@ -10,12 +10,14 @@ import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.*;
 
+/**
+ *     given - specification
+ *     when - request
+ *     then - assertion
+ */
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BookingTest {
-
-    // given - specification
-    // when - request
-    // then - assertion
 
     static String id;
     static String token;
@@ -25,8 +27,7 @@ public class BookingTest {
     @BeforeAll
     public static void setUp() {
 
-        RestAssured.baseURI = "http://localhost:3001";
-        RestAssured.port = 3001;
+        RestAssured.baseURI = "https://restful-booker.herokuapp.com";
         RestAssured.basePath = "/booking";
         RestAssured.authentication = basic(username, password);
     }
@@ -85,8 +86,8 @@ public class BookingTest {
         bookingDates.put("checkout", "2021-02-01");
 
         JSONObject booking = new JSONObject();
-        booking.put("firstname", "Diukey101");
-        booking.put("lastname", "PSN");
+        booking.put("firstname", "firstname123");
+        booking.put("lastname", "lastname123");
         booking.put("totalprice", "115");
         booking.put("depositpaid", "15");
         booking.put("bookingdates", bookingDates);
@@ -109,7 +110,7 @@ public class BookingTest {
         id = json.getString("bookingid");
 
         Assertions.assertThat(json.getString("booking.firstname"))
-                .isEqualTo("Diukey101");
+                .isEqualTo("firstname123");
     }
 
     @Test
@@ -129,7 +130,7 @@ public class BookingTest {
         JsonPath json = response.jsonPath();
 
         Assertions.assertThat(json.getString("firstname"))
-                .isEqualTo("Diukey101");
+                .isEqualTo("firstname123");
     }
 
     @Test
@@ -170,12 +171,12 @@ public class BookingTest {
         bookingDates.put("checkout", "2021-02-01");
 
         JSONObject booking = new JSONObject();
-        booking.put("firstname", "Diukey101");
-        booking.put("lastname", "PSN");
-        booking.put("totalprice", "115");
-        booking.put("depositpaid", "15");
+        booking.put("firstname", "firstname456");
+        booking.put("lastname", "lastname456");
+        booking.put("totalprice", "225");
+        booking.put("depositpaid", "25");
         booking.put("bookingdates", bookingDates);
-        booking.put("additionalneeds", "monster");
+        booking.put("additionalneeds", "cookie");
 
         Response response = given()
                 .contentType(ContentType.JSON)
@@ -194,7 +195,7 @@ public class BookingTest {
         id = json.getString("bookingid");
 
         Assertions.assertThat(json.getString("booking.firstname"))
-                .isEqualTo("Diukey101");
+                .isEqualTo("firstname456");
     }
 
     @Test
@@ -202,8 +203,8 @@ public class BookingTest {
     public void shouldPartiallyUpdateBooking() {
 
         JSONObject update = new JSONObject();
-        update.put("firstname", "mat");
-        update.put("lastname", "muz");
+        update.put("firstname", "firstname123");
+        update.put("lastname", "lastname123");
 
         Response response = given().header("Cookie", "token=" + token)
                 .contentType(ContentType.JSON)
