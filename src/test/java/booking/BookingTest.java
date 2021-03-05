@@ -1,12 +1,14 @@
 package booking;
 
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.json.JSONObject;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static io.restassured.RestAssured.*;
 
@@ -17,20 +19,7 @@ import static io.restassured.RestAssured.*;
  */
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BookingTest {
-
-    static String id;
-    static String token;
-    static String username = "admin";
-    static String password = "password123";
-
-    @BeforeAll
-    public static void setUp() {
-
-        RestAssured.baseURI = "https://restful-booker.herokuapp.com";
-        RestAssured.basePath = "/booking";
-        RestAssured.authentication = basic(username, password);
-    }
+public class BookingTest extends BaseTest {
 
     @Test
     @Order(1)
