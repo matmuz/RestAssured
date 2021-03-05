@@ -1,4 +1,4 @@
-package booking;
+package base;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
@@ -7,10 +7,10 @@ import static io.restassured.RestAssured.basic;
 
 public class BaseTest {
 
-    static String id;
-    static String token;
-    static String username = "admin";
-    static String password = "password123";
+    public static String id;
+    public static String token;
+    public static String username = "admin";
+    public static String password = "password123";
 
     @BeforeAll
     public static void setUp() {
