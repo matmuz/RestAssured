@@ -28,8 +28,8 @@ public class BookingTest extends BaseTest {
     public void shouldCreateToken() {
 
         JSONObject body = new JSONObject();
-        body.put("username", user.getUsername());
-        body.put("password", user.getPassword());
+        body.put("username", admin.getUsername());
+        body.put("password", admin.getPassword());
 
         Response response = given().contentType(ContentType.JSON)
                 .body(body.toString())
