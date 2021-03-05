@@ -1,6 +1,7 @@
 package tests;
 
 import base.BaseTest;
+import data.UserProvider;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -27,8 +28,8 @@ public class BookingTest extends BaseTest {
     public void shouldCreateToken() {
 
         JSONObject body = new JSONObject();
-        body.put("username", username);
-        body.put("password", password);
+        body.put("username", "admin");
+        body.put("password", "password123");
 
         Response response = given().contentType(ContentType.JSON)
                 .body(body.toString())
@@ -63,7 +64,7 @@ public class BookingTest extends BaseTest {
         JsonPath json = response.jsonPath();
 
         Assertions.assertThat(json.getList("bookingid")
-                .size())
+                                      .size())
                 .isPositive();
     }
 
@@ -76,8 +77,8 @@ public class BookingTest extends BaseTest {
         bookingDates.put("checkout", "2021-02-01");
 
         JSONObject booking = new JSONObject();
-        booking.put("firstname", "firstname123");
-        booking.put("lastname", "lastname123");
+        booking.put("firstname", user.getFirstName());
+        booking.put("lastname", user.getLastName());
         booking.put("totalprice", "115");
         booking.put("depositpaid", "15");
         booking.put("bookingdates", bookingDates);
@@ -100,7 +101,7 @@ public class BookingTest extends BaseTest {
         id = json.getString("bookingid");
 
         Assertions.assertThat(json.getString("booking.firstname"))
-                .isEqualTo("firstname123");
+                .isEqualTo(user.getFirstName());
     }
 
     @Test
@@ -120,7 +121,7 @@ public class BookingTest extends BaseTest {
         JsonPath json = response.jsonPath();
 
         Assertions.assertThat(json.getString("firstname"))
-                .isEqualTo("firstname123");
+                .isEqualTo(user.getFirstName());
     }
 
     @Test
@@ -156,13 +157,15 @@ public class BookingTest extends BaseTest {
     @Order(7)
     public void shouldCreateAnotherBooking() {
 
+        UserProvider anotherUser = new UserProvider();
+
         JSONObject bookingDates = new JSONObject();
         bookingDates.put("checkin", "2021-01-23");
         bookingDates.put("checkout", "2021-02-01");
 
         JSONObject booking = new JSONObject();
-        booking.put("firstname", "firstname456");
-        booking.put("lastname", "lastname456");
+        booking.put("firstname", anotherUser.getFirstName());
+        booking.put("lastname", anotherUser.getLastName());
         booking.put("totalprice", "225");
         booking.put("depositpaid", "25");
         booking.put("bookingdates", bookingDates);
@@ -185,7 +188,7 @@ public class BookingTest extends BaseTest {
         id = json.getString("bookingid");
 
         Assertions.assertThat(json.getString("booking.firstname"))
-                .isEqualTo("firstname456");
+                .isEqualTo(anotherUser.getFirstName());
     }
 
     @Test
@@ -193,8 +196,8 @@ public class BookingTest extends BaseTest {
     public void shouldPartiallyUpdateBooking() {
 
         JSONObject update = new JSONObject();
-        update.put("firstname", "firstname123");
-        update.put("lastname", "lastname123");
+        update.put("firstname", user.getFirstName());
+        update.put("lastname", user.getLastName());
 
         Response response = given().header("Cookie", "token=" + token)
                 .contentType(ContentType.JSON)
@@ -222,6 +225,6 @@ public class BookingTest extends BaseTest {
         JsonPath json = response.jsonPath();
 
         Assertions.assertThat(json.getString("firstname"))
-                .isEqualTo("firstname123");
+                .isEqualTo(user.getFirstName());
     }
 }
