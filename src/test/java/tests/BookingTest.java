@@ -23,8 +23,26 @@ import static io.restassured.RestAssured.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BookingTest extends BaseTest {
 
-    @Test
+    @Test()
     @Order(1)
+    public void shouldGetResponse() {
+
+        Response response = given().when()
+                .get(baseURI + "/ping")
+                .then()
+                .extract()
+                .response();
+
+        int statusCode = response.statusCode();
+
+        if (statusCode != 201) {
+            System.out.println("Health check failed with status " + statusCode);
+            System.exit(1);
+        }
+    }
+
+    @Test
+    @Order(2)
     public void shouldCreateToken() {
 
         JSONObject body = new JSONObject();
@@ -48,7 +66,7 @@ public class BookingTest extends BaseTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     public void shouldReturnListOfBookings() {
 
         Response response = given()
@@ -69,7 +87,7 @@ public class BookingTest extends BaseTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     public void shouldCreateNewBooking() {
 
         JSONObject bookingDates = new JSONObject();
@@ -105,7 +123,7 @@ public class BookingTest extends BaseTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     public void shouldGetCreatedBooking() {
 
         Response response = given()
@@ -125,7 +143,7 @@ public class BookingTest extends BaseTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void shouldDeleteCreatedBooking() {
 
         Response response = given().header("Cookie", "token=" + token)
@@ -140,7 +158,7 @@ public class BookingTest extends BaseTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void shouldNotFindDeletedBooking() {
 
         Response response = given().when()
@@ -154,7 +172,7 @@ public class BookingTest extends BaseTest {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     public void shouldCreateAnotherBooking() {
 
         UserProvider anotherUser = new UserProvider();
@@ -192,7 +210,7 @@ public class BookingTest extends BaseTest {
     }
 
     @Test
-    @Order(8)
+    @Order(9)
     public void shouldPartiallyUpdateBooking() {
 
         JSONObject update = new JSONObject();
@@ -213,7 +231,7 @@ public class BookingTest extends BaseTest {
     }
 
     @Test
-    @Order(9)
+    @Order(10)
     public void shouldGetUpdatedBooking() {
 
         Response response = given().when()
