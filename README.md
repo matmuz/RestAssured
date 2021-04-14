@@ -9,5 +9,5 @@ If you want to run tests from CMD:
 2. Run mvn clean test command
 
 *Optionally, if you want to see a report there is a surefire-report plugin so feel free to use it:
-- mvn surefire-report:report
-- if you are lacking CSS in the report use: mvn site -DgenerateReports=false
+1. mvn surefire-report:report
+2. if you are lacking CSS in the report use: mvn site -DgenerateReports=false
