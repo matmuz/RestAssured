@@ -13,8 +13,6 @@ import java.io.IOException;
 
 import static io.restassured.RestAssured.*;
 
-//TODO: Utility methods should be placed elsewhere
-
 public class BaseTest {
 
     protected static String id;
@@ -85,7 +83,7 @@ public class BaseTest {
         return booking;
     }
 
-    public static JSONObject partiallyUpdateBooking(){
+    public static JSONObject prepareBookingUpdate(){
 
         JSONObject update = new JSONObject();
         update.put("firstname", user.getFirstName());

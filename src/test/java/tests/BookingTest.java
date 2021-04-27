@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.*;
 
-//TODO: Avoid test dependency - all tests should be able to run separately - can be done by extending tests to be done from scratch
-
 public class BookingTest extends BaseTest {
 
     @Test
@@ -29,7 +27,7 @@ public class BookingTest extends BaseTest {
         JsonPath json = response.jsonPath();
 
         Assertions.assertThat(json.getList("bookingid")
-                                      .size())
+                .size())
                 .isPositive();
     }
 
@@ -50,8 +48,6 @@ public class BookingTest extends BaseTest {
 
         JsonPath json = response.jsonPath();
 
-        id = json.getString("bookingid");
-
         Assertions.assertThat(json.getString("booking.firstname"))
                 .isEqualTo(user.getFirstName());
     }
@@ -59,7 +55,19 @@ public class BookingTest extends BaseTest {
     @Test
     public void shouldGetCreatedBooking() {
 
-        Response response = given()
+        Response response = given().contentType(ContentType.JSON)
+                .body(prepareNewBooking().toString())
+                .when()
+                .post(baseURI + basePath)
+                .then()
+                .extract()
+                .response();
+
+        JsonPath json = response.jsonPath();
+
+        id = json.getString("bookingid");
+
+        response = given()
                 .when()
                 .get(baseURI + basePath + "/" + id)
                 .then()
@@ -69,7 +77,7 @@ public class BookingTest extends BaseTest {
         Assertions.assertThat(response.statusCode())
                 .isEqualTo(200);
 
-        JsonPath json = response.jsonPath();
+        json = response.jsonPath();
 
         Assertions.assertThat(json.getString("firstname"))
                 .isEqualTo(user.getFirstName());
@@ -78,7 +86,19 @@ public class BookingTest extends BaseTest {
     @Test
     public void shouldDeleteCreatedBooking() {
 
-        Response response = given().header("Cookie", "token=" + token)
+        Response response = given().contentType(ContentType.JSON)
+                .body(prepareNewBooking().toString())
+                .when()
+                .post(baseURI + basePath)
+                .then()
+                .extract()
+                .response();
+
+        JsonPath json = response.jsonPath();
+
+        id = json.getString("bookingid");
+
+        response = given().header("Cookie", "token=" + token)
                 .when()
                 .delete(baseURI + basePath + "/" + id)
                 .then()
@@ -92,7 +112,26 @@ public class BookingTest extends BaseTest {
     @Test
     public void shouldNotFindDeletedBooking() {
 
-        Response response = given().when()
+        Response response = given().contentType(ContentType.JSON)
+                .body(prepareNewBooking().toString())
+                .when()
+                .post(baseURI + basePath)
+                .then()
+                .extract()
+                .response();
+
+        JsonPath json = response.jsonPath();
+
+        id = json.getString("bookingid");
+
+        given().header("Cookie", "token=" + token)
+                .when()
+                .delete(baseURI + basePath + "/" + id)
+                .then()
+                .extract()
+                .response();
+
+        response = given().when()
                 .get(baseURI + basePath + id)
                 .then()
                 .extract()
@@ -103,10 +142,9 @@ public class BookingTest extends BaseTest {
     }
 
     @Test
-    public void shouldCreateAnotherBooking() {
+    public void shouldPartiallyUpdateBooking() {
 
-        Response response = given()
-                .contentType(ContentType.JSON)
+        Response response = given().contentType(ContentType.JSON)
                 .body(prepareNewBooking().toString())
                 .when()
                 .post(baseURI + basePath)
@@ -114,23 +152,13 @@ public class BookingTest extends BaseTest {
                 .extract()
                 .response();
 
-        Assertions.assertThat(response.statusCode())
-                .isEqualTo(200);
-
         JsonPath json = response.jsonPath();
 
         id = json.getString("bookingid");
 
-        Assertions.assertThat(json.getString("booking.firstname"))
-                .isEqualTo(user.getFirstName());
-    }
-
-    @Test
-    public void shouldPartiallyUpdateBooking() {
-
-        Response response = given().header("Cookie", "token=" + token)
+        response = given().header("Cookie", "token=" + token)
                 .contentType(ContentType.JSON)
-                .body(partiallyUpdateBooking().toString())
+                .body(prepareBookingUpdate().toString())
                 .when()
                 .patch(baseURI + basePath + "/" + id)
                 .then()
@@ -144,13 +172,34 @@ public class BookingTest extends BaseTest {
     @Test
     public void shouldGetUpdatedBooking() {
 
-        Response response = given().when()
-                .get(baseURI + basePath + "/" + id)
+        Response response = given().contentType(ContentType.JSON)
+                .body(prepareNewBooking().toString())
+                .when()
+                .post(baseURI + basePath)
                 .then()
                 .extract()
                 .response();
 
         JsonPath json = response.jsonPath();
+
+        id = json.getString("bookingid");
+
+        given().header("Cookie", "token=" + token)
+                .contentType(ContentType.JSON)
+                .body(prepareBookingUpdate().toString())
+                .when()
+                .patch(baseURI + basePath + "/" + id)
+                .then()
+                .extract()
+                .response();
+
+        response = given().when()
+                .get(baseURI + basePath + "/" + id)
+                .then()
+                .extract()
+                .response();
+
+        json = response.jsonPath();
 
         Assertions.assertThat(json.getString("firstname"))
                 .isEqualTo(user.getFirstName());
