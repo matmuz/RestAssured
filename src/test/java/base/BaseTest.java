@@ -22,7 +22,7 @@ public class BaseTest {
 
     @BeforeAll
     public static void setUp() throws IOException {
-        user = new UserProvider();
+        user = UserProvider.getUser();
         admin = JsonPicker.get("src/test/resources/data/admin.json");
         RestAssured.baseURI = "https://restful-booker.herokuapp.com";
         RestAssured.basePath = "/booking";
