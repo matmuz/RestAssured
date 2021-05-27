@@ -6,14 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 
-public class JsonPicker {
+public class Admin {
 
     private String username;
     private String password;
 
-    public static JsonPicker get(String filename) throws IOException {
+    public static Admin get(String filename) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File(filename), JsonPicker.class);
+        return mapper.readValue(new File(filename), Admin.class);
     }
 
     @JsonProperty("username")

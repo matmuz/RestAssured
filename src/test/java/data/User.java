@@ -2,13 +2,13 @@ package data;
 
 import com.github.javafaker.Faker;
 
-public class UserProvider {
+public class User {
 
-    private static final UserProvider USER = new UserProvider();
+    private static final User USER = new User();
     private final String FIRSTNAME;
     private final String LASTNAME;
 
-    private UserProvider() {
+    private User() {
         Faker faker = new Faker();
         FIRSTNAME = faker.name()
                 .firstName();
@@ -16,7 +16,7 @@ public class UserProvider {
                 .lastName();
     }
 
-    public static UserProvider getUser(){
+    public static User getUser(){
         return USER;
     }
 

@@ -8,6 +8,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.*;
+import static tests.TestMethods.prepareBookingUpdate;
+import static tests.TestMethods.prepareNewBooking;
 
 public class BookingTest extends BaseTest {
 
@@ -36,7 +38,7 @@ public class BookingTest extends BaseTest {
 
         Response response = given()
                 .contentType(ContentType.JSON)
-                .body(prepareNewBooking().toString())
+                .body(prepareNewBooking(user.getFirstName(), user.getLastName()).toString())
                 .when()
                 .post(baseURI + basePath)
                 .then()
@@ -56,7 +58,7 @@ public class BookingTest extends BaseTest {
     public void shouldGetCreatedBooking() {
 
         Response response = given().contentType(ContentType.JSON)
-                .body(prepareNewBooking().toString())
+                .body(prepareNewBooking(user.getFirstName(), user.getLastName()).toString())
                 .when()
                 .post(baseURI + basePath)
                 .then()
@@ -87,7 +89,7 @@ public class BookingTest extends BaseTest {
     public void shouldDeleteCreatedBooking() {
 
         Response response = given().contentType(ContentType.JSON)
-                .body(prepareNewBooking().toString())
+                .body(prepareNewBooking(user.getFirstName(), user.getLastName()).toString())
                 .when()
                 .post(baseURI + basePath)
                 .then()
@@ -113,7 +115,7 @@ public class BookingTest extends BaseTest {
     public void shouldNotFindDeletedBooking() {
 
         Response response = given().contentType(ContentType.JSON)
-                .body(prepareNewBooking().toString())
+                .body(prepareNewBooking(user.getFirstName(), user.getLastName()).toString())
                 .when()
                 .post(baseURI + basePath)
                 .then()
@@ -145,7 +147,7 @@ public class BookingTest extends BaseTest {
     public void shouldPartiallyUpdateBooking() {
 
         Response response = given().contentType(ContentType.JSON)
-                .body(prepareNewBooking().toString())
+                .body(prepareNewBooking(user.getFirstName(), user.getLastName()).toString())
                 .when()
                 .post(baseURI + basePath)
                 .then()
@@ -158,7 +160,7 @@ public class BookingTest extends BaseTest {
 
         response = given().header("Cookie", "token=" + token)
                 .contentType(ContentType.JSON)
-                .body(prepareBookingUpdate().toString())
+                .body(prepareBookingUpdate(user.getFirstName(), user.getLastName()).toString())
                 .when()
                 .patch(baseURI + basePath + "/" + id)
                 .then()
@@ -173,7 +175,7 @@ public class BookingTest extends BaseTest {
     public void shouldGetUpdatedBooking() {
 
         Response response = given().contentType(ContentType.JSON)
-                .body(prepareNewBooking().toString())
+                .body(prepareNewBooking(user.getFirstName(), user.getLastName()).toString())
                 .when()
                 .post(baseURI + basePath)
                 .then()
@@ -186,7 +188,7 @@ public class BookingTest extends BaseTest {
 
         given().header("Cookie", "token=" + token)
                 .contentType(ContentType.JSON)
-                .body(prepareBookingUpdate().toString())
+                .body(prepareBookingUpdate(user.getFirstName(), user.getLastName()).toString())
                 .when()
                 .patch(baseURI + basePath + "/" + id)
                 .then()
