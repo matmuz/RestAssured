@@ -4,27 +4,27 @@ import com.github.javafaker.Faker;
 
 public class User {
 
-    private static final User USER = new User();
-    private final String FIRSTNAME;
-    private final String LASTNAME;
+    private static final User user = new User();
+    private final String firstName;
+    private final String lastName;
 
     private User() {
         Faker faker = new Faker();
-        FIRSTNAME = faker.name()
+        firstName = faker.name()
                 .firstName();
-        LASTNAME = faker.name()
+        lastName = faker.name()
                 .lastName();
     }
 
     public static User getUser(){
-        return USER;
+        return user;
     }
 
     public String getFirstName() {
-        return FIRSTNAME;
+        return firstName;
     }
 
     public String getLastName() {
-        return LASTNAME;
+        return lastName;
     }
 }
