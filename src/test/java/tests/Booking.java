@@ -11,7 +11,7 @@ import static io.restassured.RestAssured.*;
 import static tests.TestMethods.prepareBookingUpdate;
 import static tests.TestMethods.prepareNewBooking;
 
-public class BookingTest extends BaseTest {
+public class Booking extends BaseTest {
 
     @Test
     public void shouldReturnListOfBookings() {
