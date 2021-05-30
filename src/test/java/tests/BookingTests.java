@@ -7,22 +7,31 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static booking.Booking.*;
+import static booking.Requests.*;
+import static booking.Utils.getId;
+import static booking.Utils.getJson;
 
-public class BookingTests extends BaseTest {
+/**
+ * A collection of tests that cover all the API methods in simple scenarios
+ * <p>
+ * The keyword "should" determines what a particular test wants to achieve
+ */
 
-    private static String id;
+public final class BookingTests extends BaseTest {
+
     private static final String ADDITIONAL_NEED = "monster";
+    private String id;
+    private Response response;
+    private JsonPath json;
 
     @Test
     public void shouldReturnListOfBookings() {
 
-        Response response = Requests.getBookings();
-
+        response = getBookings();
         Assertions.assertThat(response.statusCode())
                 .isEqualTo(200);
 
-        JsonPath json = response.jsonPath();
-
+        json = getJson(response);
         Assertions.assertThat(json.getList(BOOKING_ID)
                                       .size())
                 .isPositive();
@@ -31,13 +40,11 @@ public class BookingTests extends BaseTest {
     @Test
     public void shouldCreateNewBooking() {
 
-        Response response = Requests.postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
-
+        response = postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
         Assertions.assertThat(response.statusCode())
                 .isEqualTo(200);
 
-        JsonPath json = response.jsonPath();
-
+        json = getJson(response);
         Assertions.assertThat(json.getString(BOOKING_FIRSTNAME))
                 .isEqualTo(user.getFirstName());
     }
@@ -45,19 +52,14 @@ public class BookingTests extends BaseTest {
     @Test
     public void shouldGetCreatedBooking() {
 
-        Response response = Requests.postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        response = postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        json = getJson(response);
+        id = getId(json);
 
-        JsonPath json = response.jsonPath();
-
-        id = json.getString(BOOKING_ID);
-
-        response = Requests.getBooking(id);
-
+        response = getBooking(id);
         Assertions.assertThat(response.statusCode())
                 .isEqualTo(200);
-
-        json = response.jsonPath();
-
+        json = getJson(response);
         Assertions.assertThat(json.getString(FIRSTNAME))
                 .isEqualTo(user.getFirstName());
     }
@@ -65,14 +67,11 @@ public class BookingTests extends BaseTest {
     @Test
     public void shouldDeleteCreatedBooking() {
 
-        Response response = Requests.postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        response = postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        json = getJson(response);
+        id = getId(json);
 
-        JsonPath json = response.jsonPath();
-
-        id = json.getString(BOOKING_ID);
-
-        response = Requests.deleteBooking(token, id);
-
+        response = deleteBooking(token, id);
         Assertions.assertThat(response.statusCode())
                 .isEqualTo(201);
     }
@@ -80,16 +79,12 @@ public class BookingTests extends BaseTest {
     @Test
     public void shouldNotFindDeletedBooking() {
 
-        Response response = Requests.postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        response = postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        json = getJson(response);
+        id = getId(json);
 
-        JsonPath json = response.jsonPath();
-
-        id = json.getString(BOOKING_ID);
-
-        Requests.deleteBooking(token, id);
-
-        response = Requests.getBooking(id);
-
+        deleteBooking(token, id);
+        response = getBooking(id);
         Assertions.assertThat(response.statusCode())
                 .isEqualTo(404);
     }
@@ -97,14 +92,11 @@ public class BookingTests extends BaseTest {
     @Test
     public void shouldPartiallyUpdateBooking() {
 
-        Response response = Requests.postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        response = postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        json = getJson(response);
+        id = getId(json);
 
-        JsonPath json = response.jsonPath();
-
-        id = json.getString(BOOKING_ID);
-
-        response = Requests.updateBooking(token, id, user.getFirstName(), user.getLastName());
-
+        response = updateBooking(token, id, user.getFirstName(), user.getLastName());
         Assertions.assertThat(response.statusCode())
                 .isEqualTo(200);
     }
@@ -112,18 +104,13 @@ public class BookingTests extends BaseTest {
     @Test
     public void shouldGetUpdatedBooking() {
 
-        Response response = Requests.postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        response = postBooking(user.getFirstName(), user.getLastName(), ADDITIONAL_NEED);
+        json = getJson(response);
+        id = getId(json);
 
-        JsonPath json = response.jsonPath();
-
-        id = json.getString(BOOKING_ID);
-
-        Requests.updateBooking(token, id, user.getFirstName(), user.getLastName());
-
-        response = Requests.getBooking(id);
-
-        json = response.jsonPath();
-
+        updateBooking(token, id, user.getFirstName(), user.getLastName());
+        response = getBooking(id);
+        json = getJson(response);
         Assertions.assertThat(json.getString(FIRSTNAME))
                 .isEqualTo(user.getFirstName());
     }

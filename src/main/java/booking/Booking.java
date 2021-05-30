@@ -1,22 +1,19 @@
 package booking;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.util.Random;
 
+/**
+ * A collection of methods that prepare needed Jsons to be sent to the API
+ */
+
 public final class Booking {
 
-    public static final String BOOKING_ID = "bookingid";
-    public static final String COOKIE = "Cookie";
-    public static final String BOOKING_FIRSTNAME = "booking.firstname";
-
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
+    /**
+     * Json parameters as Strings
+     */
 
     public static final String FIRSTNAME = "firstname";
     private static final String LASTNAME = "lastname";
@@ -27,46 +24,21 @@ public final class Booking {
     private static final String BOOKING_DATES = "bookingdates";
     private static final String ADDITIONAL_NEEDS = "additionalneeds";
 
-    public static final String TOKEN = "token";
-    private static final String PING_PATH = "/ping";
-    private static final String AUTH_PATH = "/auth";
-
     private static final Random random = new Random();
 
     private Booking() {
     }
 
-    public static int healthCheck() {
-        Response response = RestAssured.given().when()
-                .get(RestAssured.baseURI + PING_PATH)
-                .then()
-                .extract()
-                .response();
-
-        return response.statusCode();
-    }
-
-    public static String createToken(String username, String password) {
-
-        JSONObject body = new JSONObject();
-        body.put(USERNAME, username);
-        body.put(PASSWORD, password);
-
-        Response response = RestAssured.given().contentType(ContentType.JSON)
-                .body(body.toString())
-                .when()
-                .post(RestAssured.baseURI + AUTH_PATH)
-                .then()
-                .extract()
-                .response();
-
-        JsonPath json = response.jsonPath();
-
-        return json.getString(TOKEN);
-    }
+    /**
+     * Utility method form preparing a new booking as Json
+     *
+     * @param firstName       user's first name for the booking
+     * @param lastName        user's last name for the booking
+     * @param additionalNeeds additional need for the booking
+     * @return JSONObject
+     */
 
     public static JSONObject prepareNewBooking(String firstName, String lastName, String additionalNeeds) {
-
         LocalDate date = java.time.LocalDate.now();
         String checkInDate = date.toString();
         String checkOutDate = date.plusDays(7)
@@ -90,8 +62,15 @@ public final class Booking {
         return booking;
     }
 
-    public static JSONObject prepareBookingUpdate(String firstName, String lastName) {
+    /**
+     * Utility method for updating already existing booking as Json
+     *
+     * @param firstName user's first name for the booking update
+     * @param lastName  user's last name for the booking update
+     * @return JSONObject
+     */
 
+    public static JSONObject prepareBookingUpdate(String firstName, String lastName) {
         JSONObject update = new JSONObject();
         update.put(FIRSTNAME, firstName);
         update.put(LASTNAME, lastName);
