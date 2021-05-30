@@ -25,8 +25,8 @@ public final class Requests {
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
 
-    public static final String COOKIE = "Cookie";
-    public static final String TOKEN = "token";
+    private static final String COOKIE = "Cookie";
+    private static final String TOKEN = "token";
 
     private static final String PING_PATH = "/ping";
     private static final String AUTH_PATH = "/auth";
@@ -146,6 +146,17 @@ public final class Requests {
                 .response();
     }
 
+    public static Response putBooking(String token, String id, String firstName, String lastName, String additionalNeed){
+        return given().header(COOKIE, (TOKEN + "=") + token)
+                .contentType(ContentType.JSON)
+                .body(prepareNewBooking(firstName, lastName, additionalNeed).toString())
+                .when()
+                .put(baseURI + basePath + "/" + id)
+                .then()
+                .extract()
+                .response();
+    }
+
     /**
      * Method for updating a booking in the API
      *
@@ -156,7 +167,7 @@ public final class Requests {
      * @return Response from the API
      */
 
-    public static Response updateBooking(String token, String id, String firstName, String lastName) {
+    public static Response patchBooking(String token, String id, String firstName, String lastName) {
         return given().header(COOKIE, (TOKEN + "=") + token)
                 .contentType(ContentType.JSON)
                 .body(prepareBookingUpdate(firstName, lastName).toString())

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.Random;
 
 /**
- * A collection of methods that prepare needed Jsons to be sent to the API
+ * A collection of methods that prepare needed Json objects to be sent to the API
  */
 
 public final class Booking {
@@ -23,8 +23,6 @@ public final class Booking {
     private static final String DEPOSIT_PAID = "depositpaid";
     private static final String BOOKING_DATES = "bookingdates";
     private static final String ADDITIONAL_NEEDS = "additionalneeds";
-
-    private static final Random random = new Random();
 
     private Booking() {
     }
@@ -48,6 +46,7 @@ public final class Booking {
         bookingDates.put(CHECK_IN, checkInDate);
         bookingDates.put(CHECK_OUT, checkOutDate);
 
+        Random random = new Random();
         String totalPrice = Double.toString(random.nextInt(200));
         String depositPaid = Double.toString(Double.parseDouble(totalPrice) / 2);
 
