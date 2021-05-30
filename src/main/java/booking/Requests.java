@@ -20,7 +20,6 @@ public final class Requests {
      */
 
     public static final String BOOKING_ID = "bookingid";
-    public static final String BOOKING_FIRSTNAME = "booking.firstname";
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
