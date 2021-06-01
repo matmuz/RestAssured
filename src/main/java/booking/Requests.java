@@ -145,6 +145,17 @@ public final class Requests {
                 .response();
     }
 
+    /**
+     * Method for putting a booking to the API
+     *
+     * @param token user's valid token
+     * @param id        id of a booking to update
+     * @param firstName user's first name to update
+     * @param lastName  user's last name to update
+     * @param additionalNeed user's additional need to update
+     * @return Response from the API
+     */
+
     public static Response putBooking(String token, String id, String firstName, String lastName, String additionalNeed){
         return given().header(COOKIE, (TOKEN + "=") + token)
                 .contentType(ContentType.JSON)
