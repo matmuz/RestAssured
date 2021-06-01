@@ -168,7 +168,7 @@ public final class Requests {
     }
 
     /**
-     * Method for updating a booking in the API
+     * Method for patching a booking in the API
      *
      * @param token     user's valid token
      * @param id        id of a booking to update
