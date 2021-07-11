@@ -12,13 +12,11 @@ import static io.restassured.RestAssured.*;
 /**
  * A collection of methods that cover all the basic requests to the restful-booker API
  */
-
 public final class Requests {
 
     /**
      * Json's path for particular requirements
      */
-
     public static final String BOOKING_ID = "bookingid";
 
     private static final String USERNAME = "username";
@@ -38,7 +36,6 @@ public final class Requests {
      *
      * @return Status code as an int
      */
-
     public static int healthCheck() {
         Response response = RestAssured.given()
                 .when()
@@ -57,7 +54,6 @@ public final class Requests {
      * @param password admin password
      * @return Token as String
      */
-
     public static String createToken(String username, String password) {
         JSONObject body = new JSONObject();
         body.put(USERNAME, username);
@@ -83,7 +79,6 @@ public final class Requests {
      * @param id Existing booking id
      * @return Response from the API
      */
-
     public static Response getBooking(String id) {
         return given()
                 .when()
@@ -98,7 +93,6 @@ public final class Requests {
      *
      * @return Response from the API
      */
-
     public static Response getBookings() {
         return given()
                 .when()
@@ -116,7 +110,6 @@ public final class Requests {
      * @param additionalNeed user's additional need for the booking
      * @return Response from the API
      */
-
     public static Response postBooking(String firstName, String lastName, String additionalNeed) {
         return given()
                 .contentType(ContentType.JSON)
@@ -135,7 +128,6 @@ public final class Requests {
      * @param id    id of a booking to delete
      * @return Response from the API
      */
-
     public static Response deleteBooking(String token, String id) {
         return given().header(COOKIE, (TOKEN + "=") + token)
                 .when()
@@ -155,7 +147,6 @@ public final class Requests {
      * @param additionalNeed user's additional need to update
      * @return Response from the API
      */
-
     public static Response putBooking(String token, String id, String firstName, String lastName, String additionalNeed){
         return given().header(COOKIE, (TOKEN + "=") + token)
                 .contentType(ContentType.JSON)
@@ -176,7 +167,6 @@ public final class Requests {
      * @param lastName  user's last name to update
      * @return Response from the API
      */
-
     public static Response patchBooking(String token, String id, String firstName, String lastName) {
         return given().header(COOKIE, (TOKEN + "=") + token)
                 .contentType(ContentType.JSON)

@@ -5,7 +5,6 @@ import com.github.javafaker.Faker;
 /**
  * A class responsible for creating a test user using faker
  */
-
 public final class User {
 
     private static final User user = new User();

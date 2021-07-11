@@ -16,7 +16,6 @@ import static utils.Utils.getJson;
  * <p>
  * The keyword "should" determines what a particular test wants to achieve
  */
-
 public final class BookingTests extends BaseTest {
 
     private static final String ADDITIONAL_NEED = "monster";

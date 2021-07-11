@@ -8,7 +8,6 @@ import static booking.Requests.BOOKING_ID;
 /**
  * A collection of utility methods that are repeated in tests
  */
-
 public final class Utils {
 
     private Utils() {
@@ -20,7 +19,6 @@ public final class Utils {
      * @param response response from the API
      * @return json
      */
-
     public static JsonPath getJson(Response response) {
         return response.jsonPath();
     }
@@ -31,7 +29,6 @@ public final class Utils {
      * @param json json from response
      * @return String id
      */
-
     public static String getId(JsonPath json) {
         return json.getString(BOOKING_ID);
     }

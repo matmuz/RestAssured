@@ -8,13 +8,11 @@ import java.util.Random;
 /**
  * A collection of methods that prepare needed Json objects to be sent to the API
  */
-
 public final class Booking {
 
     /**
      * Json parameters as Strings
      */
-
     public static final String FIRSTNAME = "firstname";
     private static final String LASTNAME = "lastname";
     private static final String CHECK_IN = "checkin";
@@ -35,7 +33,6 @@ public final class Booking {
      * @param additionalNeeds additional need for the booking
      * @return JSONObject
      */
-
     public static JSONObject prepareNewBooking(String firstName, String lastName, String additionalNeeds) {
         LocalDate date = java.time.LocalDate.now();
         String checkInDate = date.toString();
@@ -68,7 +65,6 @@ public final class Booking {
      * @param lastName  user's last name for the booking update
      * @return JSONObject
      */
-
     public static JSONObject prepareBookingUpdate(String firstName, String lastName) {
         JSONObject update = new JSONObject();
         update.put(FIRSTNAME, firstName);
