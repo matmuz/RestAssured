@@ -32,7 +32,7 @@ public final class BookingTests extends BaseTest {
                 .isEqualTo(200);
         json = getJson(response);
         assertThat(json.getList(BOOKING_ID)
-                                      .size())
+                .size())
                 .isPositive();
     }
 
