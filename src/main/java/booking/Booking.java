@@ -36,8 +36,7 @@ public final class Booking {
     public static JSONObject prepareNewBooking(String firstName, String lastName, String additionalNeeds) {
         LocalDate date = java.time.LocalDate.now();
         String checkInDate = date.toString();
-        String checkOutDate = date.plusDays(7)
-                .toString();
+        String checkOutDate = date.plusDays(7).toString();
 
         JSONObject bookingDates = new JSONObject();
         bookingDates.put(CHECK_IN, checkInDate);

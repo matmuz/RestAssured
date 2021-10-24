@@ -38,10 +38,7 @@ public final class Requests {
      * @return Status code as an int
      */
     public static int healthCheck() {
-        Response response = get(baseURI + PING_PATH)
-                .then()
-                .extract()
-                .response();
+        Response response = get(baseURI + PING_PATH).then().extract().response();
         System.out.println("Health check finished with status code: " + response.statusCode());
         return response.statusCode();
     }
@@ -58,14 +55,13 @@ public final class Requests {
         body.put(USERNAME, username);
         body.put(PASSWORD, password);
 
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(body.toString())
-                .when()
-                .post(baseURI + AUTH_PATH)
-                .then()
-                .extract()
-                .response();
+        Response response = given().contentType(ContentType.JSON)
+                                   .body(body.toString())
+                                   .when()
+                                   .post(baseURI + AUTH_PATH)
+                                   .then()
+                                   .extract()
+                                   .response();
 
         JsonPath json = response.jsonPath();
         Logging.log(json.prettyPrint());
@@ -79,10 +75,7 @@ public final class Requests {
      * @return Response from the API
      */
     public static Response getBooking(String id) {
-        Response response = get(baseURI + basePath + "/" + id)
-                .then()
-                .extract()
-                .response();
+        Response response = get(baseURI + basePath + "/" + id).then().extract().response();
         if (response.statusCode() != 200) {
             System.out.println("Did not find desired booking with status code: " + response.statusCode());
         } else {
@@ -97,10 +90,7 @@ public final class Requests {
      * @return Response from the API
      */
     public static Response getBookings() {
-        Response response = get(baseURI + basePath)
-                .then()
-                .extract()
-                .response();
+        Response response = get(baseURI + basePath).then().extract().response();
         Logging.log(response.jsonPath().prettyPrint());
         return response;
     }
@@ -114,14 +104,13 @@ public final class Requests {
      * @return Response from the API
      */
     public static Response postBooking(String firstName, String lastName, String additionalNeed) {
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(prepareNewBooking(firstName, lastName, additionalNeed).toString())
-                .when()
-                .post(baseURI + basePath)
-                .then()
-                .extract()
-                .response();
+        Response response = given().contentType(ContentType.JSON)
+                                   .body(prepareNewBooking(firstName, lastName, additionalNeed).toString())
+                                   .when()
+                                   .post(baseURI + basePath)
+                                   .then()
+                                   .extract()
+                                   .response();
         Logging.log(response.jsonPath().prettyPrint());
         return response;
     }
@@ -135,11 +124,11 @@ public final class Requests {
      */
     public static Response deleteBooking(String token, String id) {
         Response response = given().header(COOKIE, (TOKEN + "=") + token)
-                .when()
-                .delete(baseURI + basePath + "/" + id)
-                .then()
-                .extract()
-                .response();
+                                   .when()
+                                   .delete(baseURI + basePath + "/" + id)
+                                   .then()
+                                   .extract()
+                                   .response();
         System.out.println("Delete request finished with status code: " + response.statusCode());
         return response;
     }
@@ -154,15 +143,16 @@ public final class Requests {
      * @param additionalNeed user's additional need to update
      * @return Response from the API
      */
-    public static Response putBooking(String token, String id, String firstName, String lastName, String additionalNeed) {
+    public static Response putBooking(String token, String id, String firstName, String lastName,
+                                      String additionalNeed) {
         Response response = given().header(COOKIE, (TOKEN + "=") + token)
-                .contentType(ContentType.JSON)
-                .body(prepareNewBooking(firstName, lastName, additionalNeed).toString())
-                .when()
-                .put(baseURI + basePath + "/" + id)
-                .then()
-                .extract()
-                .response();
+                                   .contentType(ContentType.JSON)
+                                   .body(prepareNewBooking(firstName, lastName, additionalNeed).toString())
+                                   .when()
+                                   .put(baseURI + basePath + "/" + id)
+                                   .then()
+                                   .extract()
+                                   .response();
         Logging.log(response.jsonPath().prettyPrint());
         return response;
     }
@@ -178,13 +168,13 @@ public final class Requests {
      */
     public static Response patchBooking(String token, String id, String firstName, String lastName) {
         Response response = given().header(COOKIE, (TOKEN + "=") + token)
-                .contentType(ContentType.JSON)
-                .body(prepareBookingUpdate(firstName, lastName).toString())
-                .when()
-                .patch(baseURI + basePath + "/" + id)
-                .then()
-                .extract()
-                .response();
+                                   .contentType(ContentType.JSON)
+                                   .body(prepareBookingUpdate(firstName, lastName).toString())
+                                   .when()
+                                   .patch(baseURI + basePath + "/" + id)
+                                   .then()
+                                   .extract()
+                                   .response();
         Logging.log(response.jsonPath().prettyPrint());
         return response;
     }

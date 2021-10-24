@@ -28,12 +28,9 @@ public final class BookingTests extends BaseTest {
     public void shouldGetListOfBookings() {
 
         response = getBookings();
-        assertThat(response.statusCode())
-                .isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(200);
         json = getJson(response);
-        assertThat(json.getList(BOOKING_ID)
-                .size())
-                .isPositive();
+        assertThat(json.getList(BOOKING_ID).size()).isPositive();
     }
 
     @Test
@@ -44,11 +41,9 @@ public final class BookingTests extends BaseTest {
         id = getId(json);
 
         response = getBooking(id);
-        assertThat(response.statusCode())
-                .isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(200);
         json = getJson(response);
-        assertThat(json.getString(FIRSTNAME))
-                .isEqualTo(user.getFirstName());
+        assertThat(json.getString(FIRSTNAME)).isEqualTo(user.getFirstName());
     }
 
     @Test
@@ -60,12 +55,10 @@ public final class BookingTests extends BaseTest {
 
         putBooking(token, id, UPDATED_FIRSTNAME, user.getLastName(), ADDITIONAL_NEED);
         response = getBooking(id);
-        assertThat(response.statusCode())
-                .isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(200);
         json = getJson(response);
         id = getId(json);
-        assertThat(json.getString(FIRSTNAME))
-                .isEqualTo(UPDATED_FIRSTNAME);
+        assertThat(json.getString(FIRSTNAME)).isEqualTo(UPDATED_FIRSTNAME);
     }
 
     @Test
@@ -77,11 +70,9 @@ public final class BookingTests extends BaseTest {
 
         patchBooking(token, id, UPDATED_FIRSTNAME, user.getLastName());
         response = getBooking(id);
-        assertThat(response.statusCode())
-                .isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(200);
         json = getJson(response);
-        assertThat(json.getString(FIRSTNAME))
-                .isEqualTo(UPDATED_FIRSTNAME);
+        assertThat(json.getString(FIRSTNAME)).isEqualTo(UPDATED_FIRSTNAME);
     }
 
     @Test
@@ -93,7 +84,6 @@ public final class BookingTests extends BaseTest {
 
         deleteBooking(token, id);
         response = getBooking(id);
-        assertThat(response.statusCode())
-                .isEqualTo(404);
+        assertThat(response.statusCode()).isEqualTo(404);
     }
 }

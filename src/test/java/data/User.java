@@ -13,10 +13,8 @@ public final class User {
 
     private User() {
         Faker faker = new Faker();
-        firstName = faker.name()
-                .firstName();
-        lastName = faker.name()
-                .lastName();
+        firstName = faker.name().firstName();
+        lastName = faker.name().lastName();
     }
 
     public static User getUser() {
