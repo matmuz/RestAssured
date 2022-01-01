@@ -1,5 +1,6 @@
 package logging;
 
+import io.qameta.allure.Step;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -13,7 +14,8 @@ public class Logging {
         LOGGER.setLevel(Level.INFO);
     }
 
-    public static void log(String response) {
-        LOGGER.info(response);
+    @Step("Log response")
+    public static void log(String message) {
+        LOGGER.info(message);
     }
 }

@@ -2,7 +2,8 @@ package base;
 
 import data.User;
 import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeAll;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
 
 import static booking.Requests.createToken;
 import static booking.Requests.healthCheck;
@@ -28,11 +29,12 @@ public class BaseTest {
      * - check availability of the API
      * - creates token
      */
-    @BeforeAll
-    public static void setUp() {
+    @BeforeTest
+    @Parameters({"baseURI", "basePath"})
+    public void setUp(String baseURI, String basePath) {
         user = User.getUser();
-        RestAssured.baseURI = "https://restful-booker.herokuapp.com";
-        RestAssured.basePath = "/booking";
+        RestAssured.baseURI = baseURI;
+        RestAssured.basePath = basePath;
         RestAssured.authentication = basic(USERNAME, PASSWORD);
 
         if (healthCheck() != 201) {

@@ -1,5 +1,6 @@
 package booking;
 
+import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -37,9 +38,10 @@ public final class Requests {
      *
      * @return Status code as an int
      */
+    @Step("Health check")
     public static int healthCheck() {
         Response response = get(baseURI + PING_PATH).then().extract().response();
-        System.out.println("Health check finished with status code: " + response.statusCode());
+        Logging.log("Health check finished with status code: " + response.statusCode());
         return response.statusCode();
     }
 
@@ -50,6 +52,7 @@ public final class Requests {
      * @param password admin password
      * @return Token as String
      */
+    @Step("Create token")
     public static String createToken(String username, String password) {
         JSONObject body = new JSONObject();
         body.put(USERNAME, username);
@@ -74,10 +77,11 @@ public final class Requests {
      * @param id Existing booking id
      * @return Response from the API
      */
+    @Step("Get booking")
     public static Response getBooking(String id) {
         Response response = get(baseURI + basePath + "/" + id).then().extract().response();
         if (response.statusCode() != 200) {
-            System.out.println("Did not find desired booking with status code: " + response.statusCode());
+            Logging.log("Did not find desired booking with status code: " + response.statusCode());
         } else {
             Logging.log(response.jsonPath().prettyPrint());
         }
@@ -89,6 +93,7 @@ public final class Requests {
      *
      * @return Response from the API
      */
+    @Step("Get bookings")
     public static Response getBookings() {
         Response response = get(baseURI + basePath).then().extract().response();
         Logging.log(response.jsonPath().prettyPrint());
@@ -103,6 +108,7 @@ public final class Requests {
      * @param additionalNeed user's additional need for the booking
      * @return Response from the API
      */
+    @Step("Post booking")
     public static Response postBooking(String firstName, String lastName, String additionalNeed) {
         Response response = given().contentType(ContentType.JSON)
                                    .body(prepareNewBooking(firstName, lastName, additionalNeed).toString())
@@ -122,6 +128,7 @@ public final class Requests {
      * @param id    id of a booking to delete
      * @return Response from the API
      */
+    @Step("Delete booking")
     public static Response deleteBooking(String token, String id) {
         Response response = given().header(COOKIE, (TOKEN + "=") + token)
                                    .when()
@@ -129,7 +136,7 @@ public final class Requests {
                                    .then()
                                    .extract()
                                    .response();
-        System.out.println("Delete request finished with status code: " + response.statusCode());
+        Logging.log("Delete request finished with status code: " + response.statusCode());
         return response;
     }
 
@@ -143,6 +150,7 @@ public final class Requests {
      * @param additionalNeed user's additional need to update
      * @return Response from the API
      */
+    @Step("Put booking")
     public static Response putBooking(String token, String id, String firstName, String lastName,
                                       String additionalNeed) {
         Response response = given().header(COOKIE, (TOKEN + "=") + token)
@@ -166,6 +174,7 @@ public final class Requests {
      * @param lastName  user's last name to update
      * @return Response from the API
      */
+    @Step("Patch booking")
     public static Response patchBooking(String token, String id, String firstName, String lastName) {
         Response response = given().header(COOKIE, (TOKEN + "=") + token)
                                    .contentType(ContentType.JSON)

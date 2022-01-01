@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Rest Assured">
+
+    <parameter name="baseURI" value="https://restful-booker.herokuapp.com"/>
+    <parameter name="basePath" value="/booking"/>
+
+    <test name="Booking Tests">
+        <classes>
+            <class name="tests.BookingTests"/>
+        </classes>
+    </test>
+
+</suite>

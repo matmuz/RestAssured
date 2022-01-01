@@ -3,11 +3,11 @@ package tests;
 import base.BaseTest;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 
 import static booking.Booking.FIRSTNAME;
 import static booking.Requests.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import static utils.TestMethods.assertThat;
 import static utils.Utils.getId;
 import static utils.Utils.getJson;
 
