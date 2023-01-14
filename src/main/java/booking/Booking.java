@@ -10,9 +10,6 @@ import java.util.Random;
  */
 public final class Booking {
 
-    /**
-     * Json parameters as Strings
-     */
     public static final String FIRSTNAME = "firstname";
     private static final String LASTNAME = "lastname";
     private static final String CHECK_IN = "checkin";
@@ -22,6 +19,9 @@ public final class Booking {
     private static final String BOOKING_DATES = "bookingdates";
     private static final String ADDITIONAL_NEEDS = "additionalneeds";
 
+    /**
+     * Private constructor - do not let to create an instance
+     */
     private Booking() {
     }
 

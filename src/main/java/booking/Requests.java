@@ -4,7 +4,7 @@ import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import logging.Logging;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 
 import static booking.Booking.prepareBookingUpdate;
@@ -14,11 +14,9 @@ import static io.restassured.RestAssured.*;
 /**
  * A collection of methods that cover all the basic requests to the restful-booker API
  */
+@Slf4j
 public final class Requests {
 
-    /**
-     * Json's path for particular requirements
-     */
     public static final String BOOKING_ID = "bookingid";
 
     private static final String USERNAME = "username";
@@ -30,6 +28,9 @@ public final class Requests {
     private static final String PING_PATH = "/ping";
     private static final String AUTH_PATH = "/auth";
 
+    /**
+     * Private constructor - do not let to create an instance
+     */
     private Requests() {
     }
 
@@ -41,7 +42,7 @@ public final class Requests {
     @Step("Health check")
     public static int healthCheck() {
         Response response = get(baseURI + PING_PATH).then().extract().response();
-        Logging.log("Health check finished with status code: " + response.statusCode());
+        log.info("Health check finished with status code: " + response.statusCode());
         return response.statusCode();
     }
 
@@ -67,7 +68,7 @@ public final class Requests {
                                    .response();
 
         JsonPath json = response.jsonPath();
-        Logging.log(json.prettyPrint());
+        log.debug(json.prettyPrint());
         return json.getString(TOKEN);
     }
 
@@ -81,9 +82,9 @@ public final class Requests {
     public static Response getBooking(String id) {
         Response response = get(baseURI + basePath + "/" + id).then().extract().response();
         if (response.statusCode() != 200) {
-            Logging.log("Did not find desired booking with status code: " + response.statusCode());
+            log.info("Did not find desired booking with status code: " + response.statusCode());
         } else {
-            Logging.log(response.jsonPath().prettyPrint());
+            log.info(response.jsonPath().prettyPrint());
         }
         return response;
     }
@@ -96,7 +97,7 @@ public final class Requests {
     @Step("Get bookings")
     public static Response getBookings() {
         Response response = get(baseURI + basePath).then().extract().response();
-        Logging.log(response.jsonPath().prettyPrint());
+        log.debug(response.jsonPath().prettyPrint());
         return response;
     }
 
@@ -117,7 +118,7 @@ public final class Requests {
                                    .then()
                                    .extract()
                                    .response();
-        Logging.log(response.jsonPath().prettyPrint());
+        log.debug(response.jsonPath().prettyPrint());
         return response;
     }
 
@@ -136,7 +137,7 @@ public final class Requests {
                                    .then()
                                    .extract()
                                    .response();
-        Logging.log("Delete request finished with status code: " + response.statusCode());
+        log.debug("Delete request finished with status code: " + response.statusCode());
         return response;
     }
 
@@ -161,7 +162,7 @@ public final class Requests {
                                    .then()
                                    .extract()
                                    .response();
-        Logging.log(response.jsonPath().prettyPrint());
+        log.debug(response.jsonPath().prettyPrint());
         return response;
     }
 
@@ -184,7 +185,7 @@ public final class Requests {
                                    .then()
                                    .extract()
                                    .response();
-        Logging.log(response.jsonPath().prettyPrint());
+        log.debug(response.jsonPath().prettyPrint());
         return response;
     }
 }
