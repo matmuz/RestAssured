@@ -5,7 +5,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import static booking.Booking.FIRSTNAME;
+import static booking.Booking.FIRSTNAME_KEY;
 import static booking.Requests.*;
 import static utils.TestMethods.assertThat;
 import static utils.Utils.getId;
@@ -43,7 +43,7 @@ public final class BookingTests extends BaseTest {
         response = getBooking(id);
         assertThat(response.statusCode()).isEqualTo(200);
         json = getJson(response);
-        assertThat(json.getString(FIRSTNAME)).isEqualTo(user.getFirstName());
+        assertThat(json.getString(FIRSTNAME_KEY)).isEqualTo(user.getFirstName());
     }
 
     @Test
@@ -58,7 +58,7 @@ public final class BookingTests extends BaseTest {
         assertThat(response.statusCode()).isEqualTo(200);
         json = getJson(response);
         id = getId(json);
-        assertThat(json.getString(FIRSTNAME)).isEqualTo(UPDATED_FIRSTNAME);
+        assertThat(json.getString(FIRSTNAME_KEY)).isEqualTo(UPDATED_FIRSTNAME);
     }
 
     @Test
@@ -72,7 +72,7 @@ public final class BookingTests extends BaseTest {
         response = getBooking(id);
         assertThat(response.statusCode()).isEqualTo(200);
         json = getJson(response);
-        assertThat(json.getString(FIRSTNAME)).isEqualTo(UPDATED_FIRSTNAME);
+        assertThat(json.getString(FIRSTNAME_KEY)).isEqualTo(UPDATED_FIRSTNAME);
     }
 
     @Test
