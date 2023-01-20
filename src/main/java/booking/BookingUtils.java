@@ -7,35 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * A collection of methods that prepare needed Json objects to be sent to the API
- */
-public final class Booking {
+import static booking.BookingKeys.*;
 
-    public static final String FIRSTNAME_KEY = "firstname";
-    private static final String LASTNAME_KEY = "lastname";
-    private static final String CHECK_IN_KEY = "checkin";
-    private static final String CHECK_OUT_KEY = "checkout";
-    private static final String TOTAL_PRICE_KEY = "totalprice";
-    private static final String DEPOSIT_PAID_KEY = "depositpaid";
-    private static final String BOOKING_DATES_KEY = "bookingdates";
-    private static final String ADDITIONAL_NEEDS_KEY = "additionalneeds";
+public final class BookingUtils {
 
-    /**
-     * Private constructor - do not let to create an instance
-     */
-    private Booking() {
-    }
-
-    /**
-     * Utility method form preparing a new booking as Json
-     *
-     * @param firstName       user's first name for the booking
-     * @param lastName        user's last name for the booking
-     * @param additionalNeeds additional need for the booking
-     * @return JSONObject
-     */
-    public static JSONObject prepareNewBooking(String firstName, String lastName, String additionalNeeds) {
+    public static JSONObject getNewBooking(String firstName, String lastName, String additionalNeeds) {
         LocalDate checkInDate = java.time.LocalDate.now();
         LocalDate checkOutDate = checkInDate.plusDays(7);
         int totalPrice = new Random().nextInt(200);
@@ -60,14 +36,7 @@ public final class Booking {
         return new JSONObject(bookingEntity);
     }
 
-    /**
-     * Utility method for updating already existing booking as Json
-     *
-     * @param firstName user's first name for the booking update
-     * @param lastName  user's last name for the booking update
-     * @return JSONObject
-     */
-    public static JSONObject prepareBookingUpdate(String firstName, String lastName) {
+    public static JSONObject getBookingUpdate(String firstName, String lastName) {
         JSONObject update = new JSONObject();
         update.put(FIRSTNAME_KEY, firstName);
         update.put(LASTNAME_KEY, lastName);

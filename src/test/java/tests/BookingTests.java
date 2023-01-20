@@ -5,24 +5,21 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import static booking.Booking.FIRSTNAME_KEY;
-import static booking.Requests.*;
-import static utils.TestMethods.assertThat;
-import static utils.Utils.getId;
-import static utils.Utils.getJson;
+import static booking.BookingKeys.FIRSTNAME_KEY;
+import static helpers.CommonHelper.getId;
+import static helpers.CommonHelper.getJson;
+import static requests.Requests.*;
+import static requests.RequestsConstants.BOOKING_ID;
+import static utils.CustomAssertions.assertThat;
 
-/**
- * A collection of tests that cover all the API methods in simple scenarios
- * <p>
- * The keyword "should" determines what a particular test wants to achieve
- */
 public final class BookingTests extends BaseTest {
 
-    private static final String ADDITIONAL_NEED = "monster";
-    private static final String UPDATED_FIRSTNAME = "Diukey";
     private String id;
     private Response response;
     private JsonPath json;
+
+    private static final String ADDITIONAL_NEED = "monster";
+    private static final String UPDATED_FIRSTNAME = "Diukey";
 
     @Test
     public void shouldGetListOfBookings() {

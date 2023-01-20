@@ -1,13 +1,10 @@
-package data;
+package user;
 
 import com.github.javafaker.Faker;
 
-/**
- * A class responsible for creating a test user using faker
- */
 public final class User {
 
-    private static final User user = new User();
+    private static User user;
     private final String firstName;
     private final String lastName;
 
@@ -18,6 +15,9 @@ public final class User {
     }
 
     public static User getUser() {
+        if (user == null) {
+            user = new User();
+        }
         return user;
     }
 

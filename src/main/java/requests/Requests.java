@@ -1,4 +1,4 @@
-package booking;
+package requests;
 
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
@@ -7,9 +7,10 @@ import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 
-import static booking.Booking.prepareBookingUpdate;
-import static booking.Booking.prepareNewBooking;
+import static booking.BookingUtils.getBookingUpdate;
+import static booking.BookingUtils.getNewBooking;
 import static io.restassured.RestAssured.*;
+import static requests.RequestsConstants.*;
 
 /**
  * A collection of methods that cover all the basic requests to the restful-booker API
@@ -17,28 +18,6 @@ import static io.restassured.RestAssured.*;
 @Slf4j
 public final class Requests {
 
-    public static final String BOOKING_ID = "bookingid";
-
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
-
-    private static final String COOKIE = "Cookie";
-    private static final String TOKEN = "token";
-
-    private static final String PING_PATH = "/ping";
-    private static final String AUTH_PATH = "/auth";
-
-    /**
-     * Private constructor - do not let to create an instance
-     */
-    private Requests() {
-    }
-
-    /**
-     * Method for checking availability of the API
-     *
-     * @return Status code as an int
-     */
     @Step("Health check")
     public static int healthCheck() {
         Response response = get(baseURI + PING_PATH).then().extract().response();
@@ -82,9 +61,9 @@ public final class Requests {
     public static Response getBooking(String id) {
         Response response = get(baseURI + basePath + "/" + id).then().extract().response();
         if (response.statusCode() != 200) {
-            log.info("Did not find desired booking with status code: " + response.statusCode());
+            log.warn("Did not find desired booking with status code: " + response.statusCode());
         } else {
-            log.info(response.jsonPath().prettyPrint());
+            log.debug(response.jsonPath().prettyPrint());
         }
         return response;
     }
@@ -112,7 +91,7 @@ public final class Requests {
     @Step("Post booking")
     public static Response postBooking(String firstName, String lastName, String additionalNeed) {
         Response response = given().contentType(ContentType.JSON)
-                                   .body(prepareNewBooking(firstName, lastName, additionalNeed).toString())
+                                   .body(getNewBooking(firstName, lastName, additionalNeed).toString())
                                    .when()
                                    .post(baseURI + basePath)
                                    .then()
@@ -137,7 +116,7 @@ public final class Requests {
                                    .then()
                                    .extract()
                                    .response();
-        log.debug("Delete request finished with status code: " + response.statusCode());
+        log.info("Delete request finished with status code: " + response.statusCode());
         return response;
     }
 
@@ -156,7 +135,7 @@ public final class Requests {
                                       String additionalNeed) {
         Response response = given().header(COOKIE, (TOKEN + "=") + token)
                                    .contentType(ContentType.JSON)
-                                   .body(prepareNewBooking(firstName, lastName, additionalNeed).toString())
+                                   .body(getNewBooking(firstName, lastName, additionalNeed).toString())
                                    .when()
                                    .put(baseURI + basePath + "/" + id)
                                    .then()
@@ -179,7 +158,7 @@ public final class Requests {
     public static Response patchBooking(String token, String id, String firstName, String lastName) {
         Response response = given().header(COOKIE, (TOKEN + "=") + token)
                                    .contentType(ContentType.JSON)
-                                   .body(prepareBookingUpdate(firstName, lastName).toString())
+                                   .body(getBookingUpdate(firstName, lastName).toString())
                                    .when()
                                    .patch(baseURI + basePath + "/" + id)
                                    .then()

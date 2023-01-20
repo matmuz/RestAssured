@@ -5,10 +5,7 @@ import org.assertj.core.api.AbstractIntegerAssert;
 import org.assertj.core.api.AbstractStringAssert;
 import org.assertj.core.api.AssertionsForClassTypes;
 
-public class TestMethods {
-
-    private TestMethods() {
-    }
+public class CustomAssertions {
 
     @Step("Check if an int value is correct")
     public static AbstractIntegerAssert<?> assertThat(int actual) {

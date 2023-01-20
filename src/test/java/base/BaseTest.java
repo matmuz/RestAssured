@@ -1,46 +1,38 @@
 package base;
 
-import data.User;
+import user.User;
 import io.restassured.RestAssured;
+import lombok.extern.slf4j.Slf4j;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 
-import static booking.Requests.createToken;
-import static booking.Requests.healthCheck;
-import static data.Admin.PASSWORD;
-import static data.Admin.USERNAME;
+import static config.ConfigurationRetriever.getConfiguration;
 import static io.restassured.RestAssured.basic;
+import static requests.Requests.createToken;
+import static requests.Requests.healthCheck;
 
-/**
- * Base test class responsible for test preparation
- */
-public class BaseTest {
+
+@Slf4j
+public abstract class BaseTest {
 
     protected static String token;
     protected static User user;
 
-    /**
-     * setUp method that is run before all test using @BeforeAll annotation
-     * <p>
-     * prepares for tests:
-     * - gets test user
-     * - sets base path and basic endpoint
-     * - sets authentication method
-     * - check availability of the API
-     * - creates token
-     */
     @BeforeTest
     @Parameters({"baseURI", "basePath"})
     public void setUp(String baseURI, String basePath) {
+        String username = getConfiguration().username();
+        String password = getConfiguration().password();
         user = User.getUser();
         RestAssured.baseURI = baseURI;
         RestAssured.basePath = basePath;
-        RestAssured.authentication = basic(USERNAME, PASSWORD);
+        RestAssured.authentication = basic(username, password);
 
         if (healthCheck() != 201) {
-            throw new RuntimeException("restful-booker is not available at this moment. The tests will not run");
+            log.error("restful-booker service is not available at this moment. The tests will not run");
+            System.exit(0);
         }
 
-        token = createToken(USERNAME, PASSWORD);
+        token = createToken(username, password);
     }
 }
